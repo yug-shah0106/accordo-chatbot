@@ -1,0 +1,38 @@
+.demo-scenarios-page {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.demo-scenarios-page h1 {
+  margin: 0 0 24px 0;
+  font-size: 32px;
+  color: #213547;
+}
+
+.demo-content {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 40px;
+  text-align: center;
+  color: #666;
+}
+
+.demo-content p {
+  margin: 12px 0;
+  font-size: 16px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .demo-scenarios-page h1 {
+    color: rgba(255, 255, 255, 0.87);
+  }
+
+  .demo-content {
+    background: #1a1a1a;
+    border-color: #333;
+    color: rgba(255, 255, 255, 0.7);
+  }
+}
+

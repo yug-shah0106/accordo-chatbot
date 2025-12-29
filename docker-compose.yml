@@ -1,0 +1,17 @@
+version: "3.9"
+services:
+  db:
+    image: postgres:16
+    container_name: accordo_db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: accordo
+      POSTGRES_PASSWORD: accordo
+      POSTGRES_DB: accordo_mvp
+    volumes:
+      - accordo_db_data:/var/lib/postgresql/data
+
+volumes:
+  accordo_db_data:
+

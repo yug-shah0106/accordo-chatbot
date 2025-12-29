@@ -1,0 +1,358 @@
+Great — if tests are passing, your next step is to be able to explain what you built (the “science”) and then run a clean manual demo script that always works.
+
+Below is exactly that.
+
+⸻
+
+1) What you’ve implemented (in plain terms)
+
+You did not build “a chatbot that negotiates”.
+
+You built a Negotiation Engine + LLM wrapper:
+
+A) Deterministic negotiation engine (the “science”)
+	•	Extracts structured values: unit_price, payment_terms
+	•	Computes a utility score for the offer
+	•	Uses fixed thresholds + rules to decide:
+	•	ACCEPT
+	•	COUNTER (with a specific counterOffer)
+	•	ASK_CLARIFY
+	•	ESCALATE
+	•	WALK_AWAY
+	•	Enforces a state machine: once terminal (Accepted/Escalated/Walked away), chat stops
+
+B) LLM layer (the “human voice”)
+	•	LLM is not allowed to choose numbers
+	•	It only writes a natural response that matches the engine’s decision
+	•	You validate that the reply contains the exact approved values
+	•	If LLM deviates, you fallback to a safe template (demo never breaks)
+
+This is why your product is “real” and not a toy.
+
+⸻
+
+2) The science behind it (the math you can say to an investor)
+
+Step 1: Convert each variable to a 0–1 score
+
+Price utility (buyer side: lower is better)
+Let:
+	•	p_anchor = best/ideal opening price (e.g., 75)
+	•	p_max = worst acceptable price (e.g., 100)
+	•	p = offered price
+
+A linear utility:
+U_p(p)=
+\begin{cases}
+1 & p \le p_{anchor}\\
+1 - \frac{p - p_{anchor}}{p_{max} - p_{anchor}} & p_{anchor}<p<p_{max}\\
+0 & p \ge p_{max}
+\end{cases}
+
+Payment terms utility (discrete)
+U_t(t)=
+\begin{cases}
+0.2 & \text{Net 30}\\
+0.6 & \text{Net 60}\\
+1.0 & \text{Net 90}
+\end{cases}
+
+Step 2: Combine them with weights (multi-objective optimization)
+
+Weights (your config):
+	•	price weight w_p = 0.6
+	•	terms weight w_t = 0.4
+
+Total utility:
+U = w_p \cdot U_p(p) + w_t \cdot U_t(t)
+
+Step 3: Decision thresholds (policy control)
+
+You set thresholds (example):
+	•	Accept if U \ge \tau_{accept} (e.g., 0.70)
+	•	Escalate/Walk away if U < \tau_{walk} (e.g., 0.45)
+	•	Escalate if rounds exceed max (e.g., 6)
+
+That’s the science: structured scoring + weighted utility + guardrails.
+
+Step 4: Trade-off logic (Pareto-style negotiation)
+
+If vendor raises price, engine tries to recover utility by improving terms:
+	•	“Ok at $95 only if Net 90”
+This is a package counter-offer instead of a single-variable price drop.
+
+⸻
+
+3) Manual testing: a step-by-step script you can run anytime
+
+Setup (2 minutes)
+	1.	Start Postgres, backend, frontend, Ollama
+	2.	Confirm backend health:
+
+curl http://localhost:4000/health
+
+	3.	Confirm Ollama:
+
+curl http://localhost:11434/api/tags
+
+
+⸻
+
+Manual Demo Script (10 minutes, investor-ready)
+
+Step 1 — Create a fresh deal
+
+UI: New Deal → “Demo Deal — Vendor A”
+
+Expected:
+	•	Status: NEGOTIATING
+	•	Round: 0/6
+	•	Chat enabled
+
+⸻
+
+Step 2 — Force a COUNTER (shows trade-off)
+
+Send vendor message manually (or quick button):
+
+“We can do $95 Net 30.”
+
+Expected:
+	•	Accordo responds with COUNTER
+	•	Counter offer card shows something like:
+	•	$95 + Net 90 (or $92 + Net 60 depending on your logic)
+	•	Utility shows non-zero and consistent everywhere
+	•	Status stays NEGOTIATING
+
+What you say out loud
+
+“The engine doesn’t just discount. It trades variables. It will accept higher price only if we improve terms.”
+
+⸻
+
+Step 3 — Vendor moves on terms (shows convergence)
+
+Send:
+
+“Ok, Net 60 is possible.”
+
+Expected:
+	•	Accordo either ACCEPTS (if above threshold) or COUNTERS closer to target price.
+
+⸻
+
+Step 4 — Trigger ASK_CLARIFY (shows robustness)
+
+Reset deal or start new deal, then send:
+
+“We can do $92.”
+
+Expected:
+	•	Decision: ASK_CLARIFY
+	•	Reply asks only: “Confirm payment terms (Net 30/60/90)?”
+
+What you say
+
+“If the message is incomplete, the system doesn’t guess—it asks for only the missing field.”
+
+⸻
+
+Step 5 — Trigger ESCALATE / WALK_AWAY (shows safety)
+
+Reset or new deal, send:
+
+“Final is $120 Net 30.”
+
+Expected:
+	•	ESCALATE or WALK_AWAY
+	•	Chat disabled
+	•	Banner shows deal escalated
+	•	Now try sending message again → it should block (no new messages)
+
+What you say
+
+“This is important: once it hits a guardrail, it stops. It doesn’t keep negotiating blindly.”
+
+⸻
+
+Step 6 — Test Reset (shows operability)
+
+Click Reset.
+
+Expected:
+	•	Status back to NEGOTIATING
+	•	Round = 0
+	•	Messages cleared
+	•	Chat enabled
+
+⸻
+
+4) Manual test checklist (quick “looks good” verification)
+
+✅ Parsing works:
+	•	“$95 Net 30”
+	•	“95 Net 60 days”
+	•	“payment terms 50 days” → triggers clarify
+
+✅ State machine works:
+	•	After ACCEPTED / ESCALATED / WALKED_AWAY → chat is disabled
+	•	/messages returns 409 if you try again
+
+✅ LLM guardrails work:
+	•	COUNTER reply includes exact counter price + terms
+	•	ACCEPT reply restates vendor offer exactly
+	•	If LLM fails, fallback message still looks human
+
+✅ Utility display is consistent:
+	•	Same value format across chat + insights
+
+⸻
+
+5) One-liner explanation for investors (use this)
+
+“We separate negotiation logic from language: the engine optimizes a weighted utility function under strict guardrails, and the LLM only communicates decisions in a human way—with validation to prevent hallucinations.”
+
+Here’s a ready-to-use demo script (talk track + exact messages to type/click) that reliably shows COUNTER → trade-off → ASK_CLARIFY → ESCALATE safety → RESET in ~7–10 minutes.
+
+Use it exactly as-is.
+
+⸻
+
+Accordo.ai MVP Demo Script (2-variable negotiation)
+
+Demo setup (10 seconds)
+
+Action: Click Reset (or create a new deal)
+Say:
+“Accordo negotiates using strict guardrails. It only optimizes two variables in this MVP: unit price and payment terms.”
+
+⸻
+
+Part 1 — Show trade-off negotiation (COUNTER)
+
+Step 1: Start with a tough vendor offer
+
+Action: In chat, send as Vendor:
+
+“We can do $95 Net 30.”
+
+Expected: Accordo returns COUNTER with a package like:
+	•	same or slightly improved price + better terms (Net 60/Net 90)
+
+Say:
+“Notice it doesn’t blindly discount. It creates a package counter-offer — price vs terms.”
+
+Step 2: Vendor accepts better terms (move toward agreement)
+
+Action: Send:
+
+“Net 60 is possible, but price stays $95.”
+
+Expected: Accordo either:
+	•	COUNTER again pushing terms to Net 90 OR
+	•	counters price down if terms improved (depends on your decideNextMove)
+
+Say:
+“The engine keeps trading: if price doesn’t move, it pushes for stronger terms. If terms improve, it can move price slightly.”
+
+Step 3: Vendor meets halfway (trigger ACCEPT or near-accept)
+
+Action: Send:
+
+“Ok, $93 and Net 60.”
+
+Expected: Often ACCEPT (if your accept threshold allows), otherwise one last COUNTER close to target.
+
+Say:
+“At this point it’s converging. If the offer clears our threshold, it accepts. If not, it asks for one final adjustment.”
+
+✅ If it doesn’t ACCEPT here, do one more:
+
+“Final: $92 Net 60.”
+
+(That typically pushes it over the acceptance threshold in most setups.)
+
+⸻
+
+Part 2 — Show robustness (ASK_CLARIFY)
+
+Action: Click Reset (new negotiation)
+
+Step 4: Send an incomplete offer
+
+Action: Send:
+
+“We can do $92.”
+
+Expected: ASK_CLARIFY and it asks only for payment terms (Net 30/60/90).
+
+Say:
+“If a message is incomplete, it doesn’t guess. It asks only for what’s missing.”
+
+Step 5: Confirm terms
+
+Action: Send:
+
+“Net 60.”
+
+Expected: COUNTER or ACCEPT depending on your thresholds.
+
+⸻
+
+Part 3 — Show safety (ESCALATE / WALK_AWAY + chat disabled)
+
+Action: Click Reset
+
+Step 6: Send a non-viable offer
+
+Action: Send:
+
+“Final offer is $120 Net 30.”
+
+Expected: ESCALATE or WALK_AWAY, deal status becomes terminal, chat disables.
+
+Say:
+“This is a key enterprise feature: once it hits guardrails, it stops and escalates instead of continuing into a bad deal.”
+
+Step 7: Prove it blocks further negotiation
+
+Action: Try sending any message:
+
+“Ok then, $100 Net 30.”
+
+Expected: Backend should block (409) / UI stays disabled.
+
+Say:
+“After escalation, the system won’t continue unless a human resets or resumes.”
+
+⸻
+
+Part 4 — Reset and rerun (operability)
+
+Step 8: Reset
+
+Action: Click Reset
+
+Expected: Status back to NEGOTIATING, round = 0, clean transcript.
+
+Say:
+“Reset gives you a clean run for another vendor or scenario. That’s how you scale this.”
+
+⸻
+
+Optional: If you want a perfect “Auto Vendor” demo
+
+Use the same script, but replace manual vendor messages with:
+	•	Click Auto Vendor for vendor turns
+	•	You only narrate what happens
+
+Say:
+“Auto Vendor simulates real vendor behavior so we can run demos without needing a second person.”
+
+⸻
+
+One-line closing
+
+Say:
+“The science is: structured extraction → utility scoring → policy decision → validated human response. The LLM writes, but the engine decides.”
+

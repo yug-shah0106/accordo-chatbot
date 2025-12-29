@@ -1,0 +1,50 @@
+:root {
+  /* Backgrounds */
+  --bg: #0B0F17;
+  --surface: rgba(255, 255, 255, 0.04);
+  --surface2: rgba(255, 255, 255, 0.06);
+  --border: rgba(255, 255, 255, 0.08);
+  
+  /* Text */
+  --text: rgba(255, 255, 255, 0.92);
+  --muted: rgba(255, 255, 255, 0.60);
+  --muted2: rgba(255, 255, 255, 0.40);
+  
+  /* Accent - ONLY one */
+  --accent: #7C5CFF;
+  --accentSoft: rgba(124, 92, 255, 0.16);
+  --accentHover: #6B4CE6;
+  
+  /* Status colors - subtle only for badges */
+  --ok: rgba(52, 211, 153, 0.16);
+  --okText: rgba(52, 211, 153, 1);
+  --warn: rgba(251, 191, 36, 0.16);
+  --warnText: rgba(251, 191, 36, 1);
+  --danger: rgba(248, 113, 113, 0.16);
+  --dangerText: rgba(248, 113, 113, 1);
+  
+  /* Spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 24px;
+  --spacing-2xl: 32px;
+  
+  /* Border radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 14px;
+  --radius-xl: 16px;
+  
+  /* Shadows */
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
+  
+  /* Typography */
+  --font-title: 700;
+  --font-heading: 600;
+  --font-body: 400;
+  --font-label: 500;
+}
+

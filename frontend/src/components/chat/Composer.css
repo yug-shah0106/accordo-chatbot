@@ -1,0 +1,121 @@
+.composer {
+  padding: var(--spacing-lg);
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  backdrop-filter: blur(10px);
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+}
+
+.composer-chips {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-md);
+}
+
+.chip-group {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  flex-wrap: wrap;
+}
+
+.chip-label {
+  font-size: 10px;
+  font-weight: var(--font-label);
+  color: var(--muted2);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-right: var(--spacing-xs);
+}
+
+.scenario-chip,
+.quick-chip {
+  padding: 4px var(--spacing-sm);
+  font-size: 10px;
+  font-weight: var(--font-label);
+  background: var(--surface2);
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+  white-space: nowrap;
+}
+
+.scenario-chip:hover:not(:disabled),
+.quick-chip:hover:not(:disabled) {
+  background: var(--surface);
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+.scenario-chip.active {
+  background: var(--accentSoft);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.scenario-chip:disabled,
+.quick-chip:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.composer-input-row {
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+.composer-input {
+  flex: 1;
+  padding: var(--spacing-md);
+  font-size: 14px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.composer-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: var(--surface);
+}
+
+.composer-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.composer-input::placeholder {
+  color: var(--muted2);
+}
+
+.composer-send-btn {
+  padding: var(--spacing-md) var(--spacing-xl);
+  font-size: 14px;
+  font-weight: var(--font-label);
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+  white-space: nowrap;
+}
+
+.composer-send-btn:hover:not(:disabled) {
+  background: var(--accentHover);
+}
+
+.composer-send-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

@@ -1,0 +1,27 @@
+.offer-card {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  margin-top: var(--spacing-sm);
+  font-size: 12px;
+}
+
+.offer-card-label {
+  color: var(--muted);
+  font-weight: var(--font-label);
+  font-size: 11px;
+}
+
+.offer-card-value {
+  color: var(--text);
+  font-weight: var(--font-heading);
+}
+
+.offer-card-separator {
+  color: var(--muted2);
+  margin: 0 var(--spacing-xs);
+}

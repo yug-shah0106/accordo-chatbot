@@ -1,0 +1,50 @@
+.conversation-message-bubble {
+  margin-bottom: var(--spacing-md);
+  max-width: 75%;
+}
+
+.conversation-message-bubble.vendor {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+.conversation-message-bubble.accordo {
+  margin-left: auto;
+  margin-right: 0;
+}
+
+.conversation-message-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-xs);
+  font-size: 11px;
+}
+
+.conversation-message-role {
+  font-weight: var(--font-heading);
+  color: var(--text);
+}
+
+.conversation-message-time {
+  color: var(--muted);
+}
+
+.conversation-message-content {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+
+.conversation-message-bubble.vendor .conversation-message-content {
+  background: var(--surface2);
+  color: var(--text);
+}
+
+.conversation-message-bubble.accordo .conversation-message-content {
+  background: var(--accent);
+  color: white;
+}
+

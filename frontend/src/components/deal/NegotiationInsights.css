@@ -1,0 +1,96 @@
+.negotiation-insights {
+  padding: var(--spacing-xl);
+  height: 100%;
+}
+
+.insights-title {
+  margin: 0 0 var(--spacing-xl) 0;
+  font-size: 16px;
+  font-weight: var(--font-heading);
+  color: var(--text);
+  letter-spacing: -0.3px;
+}
+
+.insight-section {
+  margin-bottom: var(--spacing-xl);
+  padding-bottom: var(--spacing-xl);
+  border-bottom: 1px solid var(--border);
+}
+
+.insight-section:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.insight-label {
+  margin: 0 0 var(--spacing-md) 0;
+  font-size: 11px;
+  font-weight: var(--font-label);
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.offer-package {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.offer-package-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+}
+
+.offer-package-label {
+  color: var(--muted);
+  font-weight: var(--font-body);
+}
+
+.offer-package-value {
+  color: var(--text);
+  font-weight: var(--font-heading);
+}
+
+.offer-package-status {
+  margin-top: var(--spacing-xs);
+  font-size: 10px;
+  color: var(--muted2);
+  font-style: italic;
+}
+
+.no-offer {
+  font-size: 12px;
+  color: var(--muted2);
+  font-style: italic;
+}
+
+.timeline-compact {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.timeline-row {
+  padding: var(--spacing-sm) 0;
+  font-size: 11px;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+}
+
+.timeline-row:last-child {
+  border-bottom: none;
+}
+
+.timeline-round-compact {
+  font-weight: var(--font-body);
+  color: var(--text);
+  line-height: 1.5;
+}

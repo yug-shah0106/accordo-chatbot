@@ -1,0 +1,256 @@
+.vendor-controls {
+  padding: 24px;
+  background: white;
+  border-top: 1px solid #e0e0e0;
+}
+
+/* Demo Controls Bar */
+.demo-controls-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0f0f0;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.demo-controls-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.demo-controls-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.demo-btn {
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+  white-space: nowrap;
+}
+
+.auto-vendor-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.auto-vendor-btn:hover:not(:disabled) {
+  background-color: #218838;
+}
+
+.run-demo-btn {
+  background-color: #646cff;
+  color: white;
+}
+
+.run-demo-btn:hover:not(:disabled) {
+  background-color: #535bf2;
+}
+
+.reset-btn {
+  background-color: #6c757d;
+  color: white;
+}
+
+.reset-btn:hover:not(:disabled) {
+  background-color: #5a6268;
+}
+
+.demo-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.scenario-dropdown-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.scenario-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #666;
+  white-space: nowrap;
+}
+
+.scenario-select {
+  padding: 6px 10px;
+  font-size: 13px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: white;
+  color: #213547;
+  cursor: pointer;
+  font-family: inherit;
+  min-width: 100px;
+}
+
+.scenario-select:focus {
+  outline: none;
+  border-color: #646cff;
+  box-shadow: 0 0 0 3px rgba(100, 108, 255, 0.1);
+}
+
+.scenario-select:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Preset Section */
+.preset-section {
+  margin-bottom: 12px;
+}
+
+.preset-header {
+  margin-bottom: 8px;
+}
+
+.preset-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.preset-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.preset-btn {
+  padding: 6px 12px;
+  font-size: 12px;
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 500;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.preset-btn:hover:not(:disabled) {
+  background-color: #5a6268;
+}
+
+.preset-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Input Row */
+.input-row {
+  display: flex;
+  gap: 10px;
+}
+
+.vendor-input {
+  flex: 1;
+  padding: 10px 14px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-family: inherit;
+}
+
+.vendor-input:focus {
+  outline: none;
+  border-color: #646cff;
+  box-shadow: 0 0 0 3px rgba(100, 108, 255, 0.1);
+}
+
+.vendor-input:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.send-btn {
+  padding: 10px 20px;
+  font-size: 14px;
+  background-color: #646cff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.send-btn:hover:not(:disabled) {
+  background-color: #535bf2;
+}
+
+.send-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (prefers-color-scheme: dark) {
+  .vendor-controls {
+    background: #1a1a1a;
+    border-top-color: #333;
+  }
+
+  .demo-controls-bar {
+    border-bottom-color: #333;
+  }
+
+  .scenario-label {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .scenario-select {
+    background-color: #1a1a1a;
+    border-color: #333;
+    color: rgba(255, 255, 255, 0.87);
+  }
+
+  .scenario-select:focus {
+    border-color: #646cff;
+  }
+
+  .scenario-select:disabled {
+    background-color: #2a2a2a;
+  }
+
+  .preset-label {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .vendor-input {
+    background-color: #1a1a1a;
+    border-color: #333;
+    color: rgba(255, 255, 255, 0.87);
+  }
+
+  .vendor-input:focus {
+    border-color: #646cff;
+  }
+
+  .vendor-input:disabled {
+    background-color: #2a2a2a;
+  }
+}

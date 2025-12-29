@@ -1,0 +1,69 @@
+.deals-page {
+  padding: var(--spacing-2xl);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.deals-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-2xl);
+}
+
+.deals-header h1 {
+  margin: 0;
+  font-size: 32px;
+  font-weight: var(--font-title);
+  color: var(--text);
+  letter-spacing: -0.5px;
+}
+
+.create-btn {
+  padding: var(--spacing-md) var(--spacing-xl);
+  font-size: 14px;
+  font-weight: var(--font-label);
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.create-btn.primary {
+  background-color: var(--accent);
+  color: white;
+  box-shadow: 0 2px 8px rgba(124, 92, 255, 0.3);
+}
+
+.create-btn.primary:hover {
+  background-color: var(--accentHover);
+  box-shadow: 0 4px 12px rgba(124, 92, 255, 0.4);
+  transform: translateY(-1px);
+}
+
+.loading {
+  text-align: center;
+  padding: var(--spacing-2xl);
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.deals-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--spacing-xl);
+}
+
+.empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: var(--spacing-2xl) var(--spacing-xl);
+  color: var(--muted);
+}
+
+.empty-state p {
+  font-size: 16px;
+  margin-bottom: var(--spacing-xl);
+  color: var(--muted2);
+}

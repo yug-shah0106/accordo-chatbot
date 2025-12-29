@@ -1,0 +1,212 @@
+.explainability-panel {
+  padding: var(--spacing-xl);
+  height: 100%;
+  overflow-y: auto;
+}
+
+.explainability-title {
+  margin: 0 0 var(--spacing-xl) 0;
+  font-size: 16px;
+  font-weight: var(--font-heading);
+  color: var(--text);
+  letter-spacing: -0.3px;
+}
+
+.explainability-empty {
+  padding: var(--spacing-lg);
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.explainability-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.explainability-card:last-child {
+  margin-bottom: 0;
+}
+
+.explainability-card-title {
+  margin: 0 0 var(--spacing-md) 0;
+  font-size: 12px;
+  font-weight: var(--font-heading);
+  color: var(--text);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.explainability-hint {
+  margin: 0 0 var(--spacing-md) 0;
+  font-size: 11px;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.explainability-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-xs) 0;
+  font-size: 13px;
+}
+
+.explainability-label {
+  color: var(--muted);
+  font-weight: var(--font-body);
+}
+
+.explainability-value {
+  color: var(--text);
+  font-weight: var(--font-heading);
+}
+
+/* Utility Progress Bar */
+.utility-progress-container {
+  margin-bottom: var(--spacing-md);
+}
+
+.utility-progress-bar {
+  position: relative;
+  width: 100%;
+  height: 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  margin-bottom: var(--spacing-xs);
+}
+
+.utility-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-light));
+  transition: width 0.3s ease;
+}
+
+.utility-progress-marker {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--warning);
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+.utility-progress-marker::after {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 6px solid var(--warning);
+}
+
+.utility-progress-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--muted);
+}
+
+/* Utility Breakdown */
+.utility-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.utility-breakdown-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  padding: var(--spacing-xs) 0;
+}
+
+.utility-breakdown-row.utility-breakdown-total {
+  border-top: 1px solid var(--border);
+  padding-top: var(--spacing-sm);
+  margin-top: var(--spacing-xs);
+  font-weight: var(--font-heading);
+}
+
+.utility-breakdown-label {
+  color: var(--muted);
+}
+
+.utility-breakdown-value {
+  color: var(--text);
+  font-family: 'Monaco', 'Menlo', monospace;
+}
+
+/* Decision Card */
+.decision-badge-container {
+  margin-bottom: var(--spacing-md);
+}
+
+.decision-reasons {
+  margin-bottom: var(--spacing-md);
+}
+
+.decision-reasons-list {
+  margin: 0;
+  padding-left: var(--spacing-lg);
+  list-style-type: disc;
+}
+
+.decision-reason-item {
+  margin-bottom: var(--spacing-xs);
+  font-size: 12px;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.decision-reason-item:last-child {
+  margin-bottom: 0;
+}
+
+/* Counter Offer Card */
+.counter-offer-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-sm);
+  margin-top: var(--spacing-md);
+}
+
+.counter-offer-label {
+  font-size: 11px;
+  font-weight: var(--font-label);
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: var(--spacing-xs);
+}
+
+.counter-offer-details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.counter-offer-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+}
+
+.counter-offer-value {
+  font-weight: var(--font-heading);
+  color: var(--accent);
+}
+

@@ -1,0 +1,23 @@
+.goal-strip {
+  padding: var(--spacing-md) var(--spacing-xl);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  font-size: 13px;
+}
+
+.goal-label {
+  font-weight: var(--font-label);
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 11px;
+}
+
+.goal-text {
+  color: var(--text);
+  font-weight: var(--font-body);
+}
+

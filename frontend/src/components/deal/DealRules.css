@@ -1,0 +1,65 @@
+.deal-rules {
+  margin-bottom: var(--spacing-xl);
+  padding-bottom: var(--spacing-xl);
+  border-bottom: 1px solid var(--border);
+}
+
+.deal-rules-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.deal-rules-header:hover {
+  opacity: 0.8;
+}
+
+.deal-rules-title {
+  margin: 0;
+  font-size: 11px;
+  font-weight: var(--font-label);
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.deal-rules-toggle {
+  font-size: 11px;
+  color: var(--accent);
+  font-weight: var(--font-label);
+}
+
+.deal-rules-content {
+  margin-top: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  background: var(--surface2);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+
+.rule-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+}
+
+.rule-label {
+  color: var(--muted);
+  font-weight: var(--font-body);
+}
+
+.rule-value {
+  color: var(--text);
+  font-weight: var(--font-label);
+}
+

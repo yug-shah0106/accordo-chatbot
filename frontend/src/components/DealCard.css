@@ -1,0 +1,114 @@
+.deal-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  backdrop-filter: blur(10px);
+}
+
+.deal-card:hover {
+  border-color: var(--accent);
+  background: var(--surface2);
+  transform: translateY(-2px);
+}
+
+.deal-card-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.deal-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-lg);
+  gap: var(--spacing-md);
+}
+
+.deal-title-section {
+  flex: 1;
+  min-width: 0;
+}
+
+.deal-title {
+  margin: 0 0 var(--spacing-xs) 0;
+  font-size: 16px;
+  font-weight: var(--font-heading);
+  color: var(--text);
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.deal-counterparty {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: var(--font-body);
+}
+
+.status-badge {
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--radius-sm);
+  font-size: 10px;
+  font-weight: var(--font-label);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.status-negotiating {
+  background: var(--warn);
+  color: var(--warnText);
+}
+
+.status-accepted {
+  background: var(--ok);
+  color: var(--okText);
+}
+
+.status-escalated {
+  background: var(--accentSoft);
+  color: var(--accent);
+}
+
+.status-walked-away {
+  background: var(--danger);
+  color: var(--dangerText);
+}
+
+.status-default {
+  background: var(--surface2);
+  color: var(--muted);
+}
+
+.deal-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid var(--border);
+}
+
+.deal-round {
+  font-size: 12px;
+  font-weight: var(--font-label);
+  color: var(--text);
+}
+
+.deal-activity {
+  font-size: 11px;
+  color: var(--muted2);
+}

@@ -1,0 +1,83 @@
+.chat-transcript {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--spacing-xl) var(--spacing-md);
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--muted2);
+  font-size: 14px;
+  text-align: center;
+}
+
+.chat-messages {
+  display: flex;
+  flex-direction: column;
+}
+
+.round-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: var(--spacing-lg) var(--spacing-md);
+  position: relative;
+}
+
+.round-divider::before,
+.round-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.round-divider-text {
+  padding: 0 var(--spacing-md);
+  font-size: 11px;
+  font-weight: var(--font-label);
+  color: var(--muted2);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.processing-indicator {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  color: var(--muted);
+  font-size: 13px;
+  font-style: italic;
+}
+
+.processing-dots {
+  display: inline-flex;
+  gap: 2px;
+}
+
+.processing-dots span {
+  animation: dotPulse 1.4s infinite;
+}
+
+.processing-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.processing-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes dotPulse {
+  0%, 60%, 100% {
+    opacity: 0.3;
+  }
+  30% {
+    opacity: 1;
+  }
+}

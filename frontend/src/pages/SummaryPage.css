@@ -1,0 +1,457 @@
+.summary-page {
+  padding: 32px;
+  background-color: #f5f5f5;
+  min-height: 100%;
+}
+
+.summary-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.summary-loading,
+.summary-error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-size: 16px;
+  color: #666;
+  padding: 40px;
+}
+
+/* Header */
+.summary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 32px;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.summary-header h1 {
+  margin: 0 0 8px 0;
+  font-size: 36px;
+  font-weight: 700;
+  color: #213547;
+  letter-spacing: -0.5px;
+}
+
+.deal-title {
+  margin: 0;
+  font-size: 18px;
+  color: #666;
+  font-weight: 500;
+}
+
+.header-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.back-btn,
+.export-btn {
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.back-btn {
+  background-color: #6c757d;
+  color: white;
+}
+
+.back-btn:hover {
+  background-color: #5a6268;
+}
+
+.export-btn {
+  background-color: #646cff;
+  color: white;
+}
+
+.export-btn:hover {
+  background-color: #535bf2;
+}
+
+/* Status Card */
+.status-card {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.status-content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.status-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-badge {
+  padding: 8px 16px;
+  border-radius: 16px;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-accepted {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-walked-away {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.status-escalated {
+  background-color: #d1ecf1;
+  color: #0c5460;
+}
+
+.status-default {
+  background-color: #e9ecef;
+  color: #495057;
+}
+
+.status-meta {
+  display: flex;
+  gap: 12px;
+  font-size: 13px;
+  color: #666;
+}
+
+/* Terms Card */
+.terms-card {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.terms-card h2 {
+  margin: 0 0 20px 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #213547;
+}
+
+.terms-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.terms-table tbody tr {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.terms-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.terms-table td {
+  padding: 12px 0;
+}
+
+.term-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #666;
+  width: 40%;
+}
+
+.term-value {
+  font-size: 16px;
+  font-weight: 600;
+  color: #213547;
+}
+
+/* Concession Card */
+.concession-card {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.concession-card h2 {
+  margin: 0 0 20px 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #213547;
+}
+
+.concession-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.concession-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.concession-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.concession-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 14px;
+  color: #213547;
+}
+
+.trade-offs {
+  margin-top: 4px;
+}
+
+.trade-offs ul {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 14px;
+  color: #213547;
+}
+
+.trade-offs li {
+  margin-bottom: 4px;
+}
+
+.no-tradeoffs {
+  font-size: 14px;
+  color: #999;
+  font-style: italic;
+}
+
+/* Transcript Card */
+.transcript-card {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.transcript-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  text-align: left;
+}
+
+.transcript-header:hover {
+  background-color: #f8f9fa;
+}
+
+.transcript-header h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #213547;
+}
+
+.transcript-arrow {
+  font-size: 12px;
+  color: #666;
+  font-weight: 500;
+}
+
+.transcript-content {
+  padding: 0 24px 24px 24px;
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.no-messages {
+  padding: 40px 0;
+  text-align: center;
+  color: #999;
+  font-size: 14px;
+}
+
+.transcript-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.transcript-message {
+  padding: 16px;
+  border-radius: 8px;
+  border-left: 4px solid;
+}
+
+.transcript-message.vendor {
+  background-color: #f8f9fa;
+  border-left-color: #2196f3;
+}
+
+.transcript-message.accordo {
+  background-color: #e8f5e9;
+  border-left-color: #4caf50;
+}
+
+.transcript-message.system {
+  background-color: #fff3cd;
+  border-left-color: #ffc107;
+}
+
+.message-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  gap: 12px;
+}
+
+.message-role {
+  font-size: 12px;
+  font-weight: 600;
+  color: #666;
+  text-transform: uppercase;
+}
+
+.message-time {
+  font-size: 11px;
+  color: #999;
+}
+
+.message-text {
+  font-size: 14px;
+  color: #213547;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.message-details {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #666;
+}
+
+.message-details summary {
+  cursor: pointer;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.message-details pre {
+  margin-top: 8px;
+  padding: 8px;
+  background-color: white;
+  border-radius: 4px;
+  font-size: 11px;
+  overflow-x: auto;
+}
+
+@media (prefers-color-scheme: dark) {
+  .summary-page {
+    background-color: #1a1a1a;
+  }
+
+  .summary-header h1 {
+    color: rgba(255, 255, 255, 0.87);
+  }
+
+  .deal-title {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .status-card,
+  .terms-card,
+  .concession-card,
+  .transcript-card {
+    background: #1a1a1a;
+    border-color: #333;
+  }
+
+  .status-label {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .status-meta {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .terms-card h2,
+  .concession-card h2,
+  .transcript-header h2 {
+    color: rgba(255, 255, 255, 0.87);
+  }
+
+  .term-label {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .term-value {
+    color: rgba(255, 255, 255, 0.87);
+  }
+
+  .concession-label {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .concession-details,
+  .trade-offs ul {
+    color: rgba(255, 255, 255, 0.87);
+  }
+
+  .transcript-header:hover {
+    background-color: #2a2a2a;
+  }
+
+  .transcript-message.vendor {
+    background-color: #2a2a2a;
+  }
+
+  .transcript-message.accordo {
+    background-color: #1e3a1e;
+  }
+
+  .message-text {
+    color: rgba(255, 255, 255, 0.87);
+  }
+
+  .message-details pre {
+    background-color: #1a1a1a;
+  }
+}
+

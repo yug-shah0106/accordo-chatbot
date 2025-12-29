@@ -1,0 +1,108 @@
+.negotiation-room {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+}
+
+.negotiation-room-grid {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  height: 100%;
+  overflow: hidden;
+}
+
+.chat-column {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-right: 1px solid var(--border);
+  height: 100%;
+}
+
+.chat-column > * {
+  flex-shrink: 0;
+}
+
+.chat-column > .chat-transcript {
+  flex: 1;
+  min-height: 0;
+}
+
+.insights-column {
+  overflow-y: auto;
+  background: var(--surface);
+  backdrop-filter: blur(10px);
+}
+
+.negotiation-room-loading,
+.negotiation-room-error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-size: 16px;
+  color: var(--muted);
+}
+
+.autopilot-controls {
+  display: flex;
+  gap: 8px;
+  padding: 12px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.autopilot-btn {
+  padding: 8px 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.autopilot-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.autopilot-btn-primary {
+  background: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+.autopilot-btn-primary:hover:not(:disabled) {
+  background: #0056b3;
+  border-color: #0056b3;
+}
+
+.autopilot-btn-secondary {
+  background: white;
+  color: #333;
+  border-color: #ccc;
+}
+
+.autopilot-btn-secondary:hover:not(:disabled) {
+  background: #f0f0f0;
+}
+
+.autopilot-btn-destructive {
+  background: white;
+  color: #dc3545;
+  border-color: #dc3545;
+}
+
+.autopilot-btn-destructive:hover:not(:disabled) {
+  background: #dc3545;
+  color: white;
+}
+
+@media (max-width: 1200px) {
+  .negotiation-room-grid {
+    grid-template-columns: 1fr 320px;
+  }
+}
