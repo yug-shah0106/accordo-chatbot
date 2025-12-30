@@ -218,6 +218,39 @@ npm run build      # Build for production
 - Database must be migrated before first use
 - All negotiation logic is hardcoded (no ML training required)
 
+## Integration with Accordo Backend
+
+The main Accordo backend (port 8000) integrates with this chatbot system:
+
+### Automatic Deal Creation
+
+When a vendor is attached to a requisition in the main system, a deal is automatically created here via `POST /api/deals`:
+
+```javascript
+// Called from Accordo backend's chatbot.service.js
+POST /api/deals
+{
+  "title": "{ProjectName} - {RequisitionTitle}",
+  "counterparty": "{VendorName}"
+}
+```
+
+The returned deal ID is stored in the Contract model (`chatbotDealId`) and included in vendor notification emails.
+
+### Email Links
+
+Vendors receive emails with links to:
+- **Vendor Portal**: `http://localhost:3000/vendor?token={uniqueToken}`
+- **AI Negotiation Assistant**: `http://localhost:5173/conversation/deals/{dealId}`
+
+### Configuration
+
+The Accordo backend uses these environment variables:
+```env
+CHATBOT_FRONTEND_URL=http://localhost:5173
+CHATBOT_API_URL=http://localhost:4000/api
+```
+
 ## Next Steps (Post-MVP)
 
 - Add authentication
