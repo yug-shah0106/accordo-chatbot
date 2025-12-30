@@ -1,0 +1,137 @@
+.dialog-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 200;
+  animation: fadeIn 0.15s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.confirm-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 400px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  z-index: 201;
+  text-align: center;
+  animation: scaleIn 0.2s ease;
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.dialog-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--spacing-lg);
+}
+
+.confirm-dialog.danger .dialog-icon {
+  background: var(--danger);
+  color: var(--dangerText);
+}
+
+.confirm-dialog.warning .dialog-icon {
+  background: var(--warn);
+  color: var(--warnText);
+}
+
+.confirm-dialog.info .dialog-icon {
+  background: var(--accentSoft);
+  color: var(--accent);
+}
+
+.dialog-title {
+  font-size: 18px;
+  font-weight: var(--font-heading);
+  color: var(--text);
+  margin: 0 0 var(--spacing-sm) 0;
+}
+
+.dialog-message {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.5;
+  margin: 0 0 var(--spacing-xl) 0;
+}
+
+.dialog-actions {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: center;
+}
+
+.dialog-btn {
+  flex: 1;
+  max-width: 140px;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: var(--font-label);
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.dialog-btn.cancel {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.dialog-btn.cancel:hover {
+  background: var(--surface2);
+}
+
+.dialog-btn.confirm.danger {
+  background: var(--dangerText);
+  color: white;
+}
+
+.dialog-btn.confirm.danger:hover {
+  opacity: 0.9;
+}
+
+.dialog-btn.confirm.warning {
+  background: var(--warnText);
+  color: var(--bg);
+}
+
+.dialog-btn.confirm.warning:hover {
+  opacity: 0.9;
+}
+
+.dialog-btn.confirm.info {
+  background: var(--accent);
+  color: white;
+}
+
+.dialog-btn.confirm.info:hover {
+  background: var(--accentHover);
+}

@@ -1,5 +1,20 @@
 import express from "express";
-import { createDeal, getDeal, listMessages, listDeals, resetDeal, resumeDeal } from "../repo/dealsRepo";
+import {
+  createDeal,
+  getDeal,
+  listMessages,
+  listDeals,
+  listArchivedDeals,
+  listDeletedDeals,
+  archiveDeal,
+  unarchiveDeal,
+  softDeleteDeal,
+  restoreDeal,
+  archiveFromDeletedDeal,
+  permanentlyDeleteDeal,
+  resetDeal,
+  resumeDeal
+} from "../repo/dealsRepo";
 import { processVendorTurn } from "../engine/processVendorTurn";
 import { vendorRespond } from "../vendor/vendorAgent";
 import { getTemplateForDeal } from "../repo/templatesRepo";
@@ -11,12 +26,33 @@ dealsRouter.get("/deals", async (req, res) => {
   res.json({ deals });
 });
 
+// IMPORTANT: These specific routes MUST come before /deals/:dealId to avoid matching "archived"/"deleted" as dealId
+dealsRouter.get("/deals/archived", async (req, res) => {
+  try {
+    const deals = await listArchivedDeals();
+    res.json({ deals });
+  } catch (error) {
+    console.error("Error fetching archived deals:", error);
+    res.status(500).json({ error: "Failed to fetch archived deals" });
+  }
+});
+
+dealsRouter.get("/deals/deleted", async (req, res) => {
+  try {
+    const deals = await listDeletedDeals();
+    res.json({ deals });
+  } catch (error) {
+    console.error("Error fetching deleted deals:", error);
+    res.status(500).json({ error: "Failed to fetch deleted deals" });
+  }
+});
+
 dealsRouter.post("/deals", async (req, res) => {
   try {
     const { title, counterparty, templateId, negotiationTemplateId } = req.body;
-    const deal = await createDeal({ 
-      title, 
-      counterparty, 
+    const deal = await createDeal({
+      title,
+      counterparty,
       templateId: templateId ?? null,
       negotiationTemplateId: negotiationTemplateId ?? null
     });
@@ -200,9 +236,101 @@ dealsRouter.post("/deals/:dealId/run-demo", async (req, res) => {
     res.json({ deal: finalDeal, messages: finalMessages, steps });
   } catch (error) {
     console.error("Error running demo:", error);
-    res.status(500).json({ 
-      error: "Failed to run demo", 
-      details: error instanceof Error ? error.message : String(error) 
+    res.status(500).json({
+      error: "Failed to run demo",
+      details: error instanceof Error ? error.message : String(error)
     });
+  }
+});
+
+// ==================== Deal Lifecycle Action Endpoints ====================
+
+// Archive a deal
+dealsRouter.post("/deals/:dealId/archive", async (req, res) => {
+  try {
+    const { dealId } = req.params;
+    const deal = await getDeal(dealId);
+    if (!deal) return res.status(404).json({ error: "Deal not found" });
+
+    const updatedDeal = await archiveDeal(dealId);
+    res.json({ deal: updatedDeal });
+  } catch (error) {
+    console.error("Error archiving deal:", error);
+    res.status(500).json({ error: "Failed to archive deal" });
+  }
+});
+
+// Unarchive a deal (restore from archived to active)
+dealsRouter.post("/deals/:dealId/unarchive", async (req, res) => {
+  try {
+    const { dealId } = req.params;
+    const deal = await getDeal(dealId);
+    if (!deal) return res.status(404).json({ error: "Deal not found" });
+
+    const updatedDeal = await unarchiveDeal(dealId);
+    res.json({ deal: updatedDeal });
+  } catch (error) {
+    console.error("Error unarchiving deal:", error);
+    res.status(500).json({ error: "Failed to unarchive deal" });
+  }
+});
+
+// Soft delete a deal
+dealsRouter.post("/deals/:dealId/soft-delete", async (req, res) => {
+  try {
+    const { dealId } = req.params;
+    const deal = await getDeal(dealId);
+    if (!deal) return res.status(404).json({ error: "Deal not found" });
+
+    const updatedDeal = await softDeleteDeal(dealId);
+    res.json({ deal: updatedDeal });
+  } catch (error) {
+    console.error("Error deleting deal:", error);
+    res.status(500).json({ error: "Failed to delete deal" });
+  }
+});
+
+// Restore a deal from deleted to active
+dealsRouter.post("/deals/:dealId/restore", async (req, res) => {
+  try {
+    const { dealId } = req.params;
+    const deal = await getDeal(dealId);
+    if (!deal) return res.status(404).json({ error: "Deal not found" });
+
+    const updatedDeal = await restoreDeal(dealId);
+    res.json({ deal: updatedDeal });
+  } catch (error) {
+    console.error("Error restoring deal:", error);
+    res.status(500).json({ error: "Failed to restore deal" });
+  }
+});
+
+// Archive a deal from deleted (move to archived)
+dealsRouter.post("/deals/:dealId/archive-from-deleted", async (req, res) => {
+  try {
+    const { dealId } = req.params;
+    const deal = await getDeal(dealId);
+    if (!deal) return res.status(404).json({ error: "Deal not found" });
+
+    const updatedDeal = await archiveFromDeletedDeal(dealId);
+    res.json({ deal: updatedDeal });
+  } catch (error) {
+    console.error("Error archiving deal from deleted:", error);
+    res.status(500).json({ error: "Failed to archive deal" });
+  }
+});
+
+// Permanently delete a deal
+dealsRouter.delete("/deals/:dealId/permanent", async (req, res) => {
+  try {
+    const { dealId } = req.params;
+    const deal = await getDeal(dealId);
+    if (!deal) return res.status(404).json({ error: "Deal not found" });
+
+    await permanentlyDeleteDeal(dealId);
+    res.json({ success: true });
+  } catch (error) {
+    console.error("Error permanently deleting deal:", error);
+    res.status(500).json({ error: "Failed to permanently delete deal" });
   }
 });

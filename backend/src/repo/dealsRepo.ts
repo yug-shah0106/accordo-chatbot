@@ -44,8 +44,74 @@ export async function getDeal(dealId: string) {
 }
 
 export async function listDeals() {
-  const r = await pool.query("SELECT * FROM deals ORDER BY created_at DESC");
+  // Only return active deals (not archived, not deleted)
+  const r = await pool.query(
+    "SELECT * FROM deals WHERE archived_at IS NULL AND deleted_at IS NULL ORDER BY updated_at DESC"
+  );
   return r.rows;
+}
+
+export async function listArchivedDeals() {
+  const r = await pool.query(
+    "SELECT * FROM deals WHERE archived_at IS NOT NULL AND deleted_at IS NULL ORDER BY archived_at DESC"
+  );
+  return r.rows;
+}
+
+export async function listDeletedDeals() {
+  const r = await pool.query(
+    "SELECT * FROM deals WHERE deleted_at IS NOT NULL ORDER BY deleted_at DESC"
+  );
+  return r.rows;
+}
+
+export async function archiveDeal(dealId: string) {
+  await pool.query(
+    "UPDATE deals SET archived_at = NOW(), updated_at = NOW() WHERE id = $1",
+    [dealId]
+  );
+  return getDeal(dealId);
+}
+
+export async function unarchiveDeal(dealId: string) {
+  await pool.query(
+    "UPDATE deals SET archived_at = NULL, updated_at = NOW() WHERE id = $1",
+    [dealId]
+  );
+  return getDeal(dealId);
+}
+
+export async function softDeleteDeal(dealId: string) {
+  // When soft deleting, also clear archived_at
+  await pool.query(
+    "UPDATE deals SET deleted_at = NOW(), archived_at = NULL, updated_at = NOW() WHERE id = $1",
+    [dealId]
+  );
+  return getDeal(dealId);
+}
+
+export async function restoreDeal(dealId: string) {
+  await pool.query(
+    "UPDATE deals SET deleted_at = NULL, updated_at = NOW() WHERE id = $1",
+    [dealId]
+  );
+  return getDeal(dealId);
+}
+
+export async function archiveFromDeletedDeal(dealId: string) {
+  // Move from deleted to archived
+  await pool.query(
+    "UPDATE deals SET deleted_at = NULL, archived_at = NOW(), updated_at = NOW() WHERE id = $1",
+    [dealId]
+  );
+  return getDeal(dealId);
+}
+
+export async function permanentlyDeleteDeal(dealId: string) {
+  // First delete all messages
+  await deleteMessages(dealId);
+  // Then delete the deal
+  await pool.query("DELETE FROM deals WHERE id = $1", [dealId]);
 }
 
 export async function bumpDeal(dealId: string, patch: { 

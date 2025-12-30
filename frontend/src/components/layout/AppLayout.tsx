@@ -4,9 +4,6 @@ import TopBar from "./TopBar";
 import "./AppLayout.css";
 
 export default function AppLayout() {
-  // const location = useLocation();
-  // const isNegotiationRoom = location.pathname.includes("/deals/") && !location.pathname.includes("/summary");
-
   return (
     <div className="app-layout">
       <Sidebar />
@@ -19,5 +16,3 @@ export default function AppLayout() {
     </div>
   );
 }
-
-
