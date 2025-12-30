@@ -16,7 +16,17 @@ export function parseOfferRegex(text: string): Offer {
     priceMatch = t.match(/([0-9]+(?:\.[0-9]+)?)\s*(?:per\s+unit|\/unit)/i);
   }
   
-  // Pattern 3: Standalone numbers ONLY if there's an explicit price cue
+  // Pattern 3: "X Net Y" format (e.g., "93 Net 60" -> 93 is price, 60 is terms)
+  let matchedViaXNetY = false;
+  if (!priceMatch) {
+    const netPatternMatch = t.match(/\b([0-9]{2,5})(?:\.[0-9]+)?\s+net\s+(30|60|90)(?:\s*days?)?\b/i);
+    if (netPatternMatch) {
+      priceMatch = netPatternMatch; // The first capture group is the price
+      matchedViaXNetY = true; // Mark that we matched via this pattern
+    }
+  }
+  
+  // Pattern 4: Standalone numbers ONLY if there's an explicit price cue
   if (!priceMatch) {
     const hasPriceCue = /(\$|₹|inr|usd|rs\.?|price|unit\s*price|rate|per\s+unit|\/unit)/i.test(t);
     if (hasPriceCue) {
@@ -25,9 +35,12 @@ export function parseOfferRegex(text: string): Offer {
   }
 
   // Extra safety: if matched number is 30/60/90 and text contains "net/terms/days", treat as terms, not price
-  if (priceMatch) {
+  // This prevents "Net 60" from being parsed as price=60
+  // BUT skip this check if we matched via "X Net Y" pattern (Pattern 3) where X is clearly the price
+  if (priceMatch && !matchedViaXNetY) {
     const n = Number(priceMatch[1]);
     const looksLikeTerms = (n === 30 || n === 60 || n === 90) && /net|terms|days/i.test(t);
+    // Only nullify if there's no currency symbol and the number appears to be terms
     if (looksLikeTerms && !/(\$|₹|inr|usd|rs\.?)/i.test(t)) {
       priceMatch = null;
     }

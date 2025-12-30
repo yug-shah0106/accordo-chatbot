@@ -113,12 +113,19 @@ convoRouter.post("/deals/:dealId/messages", async (req, res) => {
     // No numbers detected - treat as negotiation response or small talk
     if (state.phase === "WAITING_FOR_OFFER") {
       // Still waiting for first offer - this is small talk
+      // Get conversation history for context
+      const existingMessages = await listMessages(dealId);
+      const conversationHistory = existingMessages
+        .filter(m => m.role === "VENDOR" || m.role === "ACCORDO")
+        .map(m => ({ role: m.role as "VENDOR" | "ACCORDO", content: m.content }));
+      
       const reply = await writeConvoReplyWithOllama({
         vendorText: text,
         intent: "SMALL_TALK",
         vendorOffer: null,
         decision: null,
         counterOffer: null,
+        conversationHistory,
       });
 
       await addMessage({ dealId, role: "VENDOR", content: text });
@@ -189,12 +196,19 @@ convoRouter.post("/deals/:dealId/messages", async (req, res) => {
         intent = "ACKNOWLEDGE";
       }
 
+      // Get conversation history for context
+      const existingMessages = await listMessages(dealId);
+      const conversationHistory = existingMessages
+        .filter(m => m.role === "VENDOR" || m.role === "ACCORDO")
+        .map(m => ({ role: m.role as "VENDOR" | "ACCORDO", content: m.content }));
+
       const reply = await writeConvoReplyWithOllama({
         vendorText: text,
         intent: intent as any,
         vendorOffer: state.lastVendorOffer ?? null,
         decision: null,
         counterOffer,
+        conversationHistory,
       });
 
       await addMessage({ dealId, role: "VENDOR", content: text });
@@ -210,16 +224,29 @@ convoRouter.post("/deals/:dealId/messages", async (req, res) => {
   }
 
   // Has offer signal - proceed with normal flow
-  const vendorOffer = parsed;
+  // Merge with last known offer when vendor doesn't repeat numbers (like "Nope" or "Can't do that")
+  const rawVendorOffer = parsed;
+  const lastVendorOffer = state.lastVendorOffer ?? null;
+  const vendorOffer: ConvoOffer = {
+    unit_price: rawVendorOffer.unit_price ?? lastVendorOffer?.unit_price ?? null,
+    payment_terms: (rawVendorOffer.payment_terms ?? lastVendorOffer?.payment_terms ?? null) as ConvoOffer["payment_terms"],
+  };
 
   // ✅ If still missing info and we're in ASK_OFFER phase, ask clarify (stay in ASK_OFFER)
   if ((state.phase === "WAITING_FOR_OFFER" || state.phase === "ASK_OFFER") && !hasCompleteOffer) {
+    // Get conversation history for context
+    const existingMessages = await listMessages(dealId);
+    const conversationHistory = existingMessages
+      .filter(m => m.role === "VENDOR" || m.role === "ACCORDO")
+      .map(m => ({ role: m.role as "VENDOR" | "ACCORDO", content: m.content }));
+    
     const reply = await writeConvoReplyWithOllama({
       vendorText: text,
       intent: "ASK_CLARIFY",
       vendorOffer: vendorOffer,
       decision: null,
       counterOffer: null,
+      conversationHistory,
     });
     
     await addMessage({ dealId, role: "VENDOR", content: text, extractedOffer: vendorOffer });
@@ -267,10 +294,8 @@ convoRouter.post("/deals/:dealId/messages", async (req, res) => {
     reasons: engineDecision.reasons,
   };
   
-  const convoOffer: ConvoOffer = {
-    unit_price: vendorOffer.unit_price,
-    payment_terms: vendorOffer.payment_terms as ConvoOffer["payment_terms"],
-  };
+  // convoOffer should use the merged vendorOffer (which already includes lastVendorOffer fallback)
+  const convoOffer: ConvoOffer = vendorOffer;
   
   // Convert config to convo config format
   const convoConfig: ConvoConfig = {
@@ -310,13 +335,20 @@ convoRouter.post("/deals/:dealId/messages", async (req, res) => {
   // 6) Compute explainability and store (but do NOT return to convo UI by default)
   const explainability = computeExplainability(convoConfig, convoOffer, convoDecision);
 
-  // 7) Write reply
+  // 7) Get conversation history for context (before adding current messages)
+  const existingMessages = await listMessages(dealId);
+  const conversationHistory = existingMessages
+    .filter(m => m.role === "VENDOR" || m.role === "ACCORDO")
+    .map(m => ({ role: m.role as "VENDOR" | "ACCORDO", content: m.content }));
+
+  // 8) Write reply with conversation history
   const reply = await writeConvoReplyWithOllama({
     vendorText: text,
     intent,
     vendorOffer: convoOffer,
     decision: convoDecision,
     counterOffer,
+    conversationHistory,
   });
 
   // 8) Store accordo message with decision + explainability

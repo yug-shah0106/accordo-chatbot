@@ -34,7 +34,10 @@ export function computeExplainability(
     weightedPrice == null || weightedTerms == null ? null : clamp01(weightedPrice + weightedTerms);
 
   return {
-    vendorOffer,
+    vendorOffer: {
+      unit_price: vendorOffer.unit_price,
+      payment_terms: vendorOffer.payment_terms,
+    },
     utilities: {
       priceUtility: pu,
       termsUtility: tu,

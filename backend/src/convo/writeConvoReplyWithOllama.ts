@@ -23,6 +23,7 @@ export async function writeConvoReplyWithOllama(args: {
   vendorOffer: Offer | null;
   decision: Decision | null;
   counterOffer: Offer | null;
+  conversationHistory?: Array<{ role: "VENDOR" | "ACCORDO"; content: string }>;
 }): Promise<string> {
   const base = process.env.OLLAMA_BASE_URL!;
   const model = process.env.OLLAMA_MODEL!;
@@ -64,24 +65,39 @@ Return ONLY the message text.
     2
   );
 
+  // Build conversation history for context
+  const messages: Array<{ role: "system" | "user" | "assistant"; content: string }> = [
+    { role: "system", content: system },
+  ];
+
+  // Add conversation history if available (last 10 messages for context)
+  if (args.conversationHistory && args.conversationHistory.length > 0) {
+    const recentHistory = args.conversationHistory.slice(-10); // Last 10 messages
+    for (const msg of recentHistory) {
+      // Convert VENDOR to user, ACCORDO to assistant for Ollama
+      const role = msg.role === "VENDOR" ? "user" : "assistant";
+      messages.push({ role, content: msg.content });
+    }
+  }
+
+  // Add current user message with context
+  messages.push({
+    role: "user",
+    content: `
+Write the next message.
+
+Context JSON:
+${user}
+`,
+  });
+
   const res = await fetch(`${base}/api/chat`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       model,
       stream: false,
-      messages: [
-        { role: "system", content: system },
-        {
-          role: "user",
-          content: `
-Write the next message.
-
-Context JSON:
-${user}
-`,
-        },
-      ],
+      messages,
     }),
   });
 
@@ -98,7 +114,7 @@ ${user}
   if (args.intent === "COUNTER_DIRECT" && args.counterOffer) {
     const ok =
       content.toLowerCase().includes(String(args.counterOffer.unit_price)) &&
-      content.toLowerCase().includes(args.counterOffer.payment_terms.toLowerCase());
+      (args.counterOffer.payment_terms ? content.toLowerCase().includes(args.counterOffer.payment_terms.toLowerCase()) : true);
     if (!ok) return fallback(args);
   }
 

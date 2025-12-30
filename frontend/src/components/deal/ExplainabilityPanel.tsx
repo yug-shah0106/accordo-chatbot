@@ -78,12 +78,18 @@ function UtilityBreakdownCard({
 }) {
   const total = utilities.total ?? 0;
   const accept = thresholds.accept;
-  const priceUtil = utilities.priceUtility ?? 0;
-  const termsUtil = utilities.termsUtility ?? 0;
-  const weightedPrice = utilities.weightedPrice ?? 0;
-  const weightedTerms = utilities.weightedTerms ?? 0;
+  const priceUtil = utilities.priceUtility;
+  const termsUtil = utilities.termsUtility;
+  const weightedPrice = utilities.weightedPrice;
+  const weightedTerms = utilities.weightedTerms;
   const wP = weights.price;
   const wT = weights.terms;
+
+  // Check if price utility is available (not null and not undefined)
+  const hasPriceUtility = priceUtil !== null && priceUtil !== undefined;
+  const hasWeightedPrice = weightedPrice !== null && weightedPrice !== undefined;
+  const hasTermsUtility = termsUtil !== null && termsUtil !== undefined;
+  const hasWeightedTerms = weightedTerms !== null && weightedTerms !== undefined;
 
   return (
     <div className="explainability-card">
@@ -116,7 +122,7 @@ function UtilityBreakdownCard({
         <div className="utility-breakdown-row">
           <span className="utility-breakdown-label">Price:</span>
           <span className="utility-breakdown-value">
-            {utilities.priceUtility !== null && utilities.weightedPrice !== null 
+            {hasPriceUtility && hasWeightedPrice && typeof priceUtil === 'number' && typeof weightedPrice === 'number'
               ? `${priceUtil.toFixed(2)} × ${wP.toFixed(2)} = ${weightedPrice.toFixed(2)}` 
               : "—"}
           </span>
@@ -124,14 +130,18 @@ function UtilityBreakdownCard({
         <div className="utility-breakdown-row">
           <span className="utility-breakdown-label">Terms:</span>
           <span className="utility-breakdown-value">
-            {utilities.termsUtility !== null && utilities.weightedTerms !== null 
+            {hasTermsUtility && hasWeightedTerms && typeof termsUtil === 'number' && typeof weightedTerms === 'number'
               ? `${termsUtil.toFixed(2)} × ${wT.toFixed(2)} = ${weightedTerms.toFixed(2)}` 
               : "—"}
           </span>
         </div>
         <div className="utility-breakdown-row utility-breakdown-total">
           <span className="utility-breakdown-label">Total Deal Score:</span>
-          <span className="utility-breakdown-value">{utilities.total !== null ? total.toFixed(2) : "—"}</span>
+          <span className="utility-breakdown-value">
+            {utilities.total !== null && utilities.total !== undefined && typeof utilities.total === 'number'
+              ? total.toFixed(2) 
+              : "—"}
+          </span>
         </div>
       </div>
     </div>
