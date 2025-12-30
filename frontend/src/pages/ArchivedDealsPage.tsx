@@ -1,14 +1,13 @@
-import { useState, useEffect, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect, useMemo, useCallback } from "react";
+import { Archive } from "lucide-react";
 import { dealsApi } from "../api/client";
 import type { Deal } from "../api/client";
-import DealCard from "../components/DealCard";
 import { DealFilters, EmptyState } from "../components/deals";
 import { ConfirmDialog } from "../components/common";
-import "./DealsPage.css";
+import DealCard from "../components/DealCard";
+import "./ArchivedDealsPage.css";
 
-export default function DealsPage() {
-  const navigate = useNavigate();
+export default function ArchivedDealsPage() {
   const [deals, setDeals] = useState<Deal[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -20,38 +19,38 @@ export default function DealsPage() {
   // Confirmation dialog state
   const [confirmDialog, setConfirmDialog] = useState<{
     isOpen: boolean;
-    type: "archive" | "delete";
+    type: "unarchive" | "delete";
     deal: Deal | null;
-  }>({ isOpen: false, type: "archive", deal: null });
+  }>({ isOpen: false, type: "unarchive", deal: null });
 
-  useEffect(() => {
-    loadDeals();
-  }, []);
-
-  const loadDeals = async () => {
+  const loadDeals = useCallback(async () => {
     setLoading(true);
     try {
-      const data = await dealsApi.list();
+      const data = await dealsApi.listArchived();
       setDeals(data.deals || []);
     } catch (error) {
-      console.error("Failed to load deals:", error);
+      console.error("Failed to load archived deals:", error);
       setDeals([]);
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    loadDeals();
+  }, [loadDeals]);
 
   // Get available years from deals
   const availableYears = useMemo(() => {
     const years = new Set<number>();
     deals.forEach((deal) => {
-      const year = new Date(deal.updated_at).getFullYear();
+      const year = new Date(deal.archived_at || deal.updated_at).getFullYear();
       years.add(year);
     });
     return Array.from(years).sort((a, b) => b - a);
   }, [deals]);
 
-  // Filter deals based on search and filters
+  // Filter deals
   const filteredDeals = useMemo(() => {
     let result = [...deals];
 
@@ -62,7 +61,6 @@ export default function DealsPage() {
         (deal) =>
           deal.title.toLowerCase().includes(query) ||
           deal.counterparty?.toLowerCase().includes(query) ||
-          deal.vendor_name?.toLowerCase().includes(query) ||
           deal.status.toLowerCase().includes(query)
       );
     }
@@ -71,7 +69,7 @@ export default function DealsPage() {
     if (selectedYear) {
       const year = parseInt(selectedYear);
       result = result.filter((deal) => {
-        const dealYear = new Date(deal.updated_at).getFullYear();
+        const dealYear = new Date(deal.archived_at || deal.updated_at).getFullYear();
         return dealYear === year;
       });
     }
@@ -80,15 +78,16 @@ export default function DealsPage() {
     if (selectedMonth) {
       const month = parseInt(selectedMonth);
       result = result.filter((deal) => {
-        const dealMonth = new Date(deal.updated_at).getMonth();
+        const dealMonth = new Date(deal.archived_at || deal.updated_at).getMonth();
         return dealMonth === month;
       });
     }
 
-    // Sort by updated_at descending
+    // Sort by archived_at descending
     result.sort(
       (a, b) =>
-        new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
+        new Date(b.archived_at || b.updated_at).getTime() -
+        new Date(a.archived_at || a.updated_at).getTime()
     );
 
     return result;
@@ -96,18 +95,14 @@ export default function DealsPage() {
 
   const hasFilters = searchQuery || selectedYear || selectedMonth;
 
-  const handleCreateNew = () => {
-    navigate("/deals/new");
-  };
-
   const handleClearFilters = () => {
     setSearchQuery("");
     setSelectedYear("");
     setSelectedMonth("");
   };
 
-  const handleArchive = (deal: Deal) => {
-    setConfirmDialog({ isOpen: true, type: "archive", deal });
+  const handleUnarchive = (deal: Deal) => {
+    setConfirmDialog({ isOpen: true, type: "unarchive", deal });
   };
 
   const handleDelete = (deal: Deal) => {
@@ -118,46 +113,33 @@ export default function DealsPage() {
     if (!confirmDialog.deal) return;
 
     try {
-      if (confirmDialog.type === "archive") {
-        await dealsApi.archive(confirmDialog.deal.id);
+      if (confirmDialog.type === "unarchive") {
+        await dealsApi.unarchive(confirmDialog.deal.id);
       } else {
         await dealsApi.softDelete(confirmDialog.deal.id);
       }
-
-      // Reload deals to reflect changes
       await loadDeals();
     } catch (error) {
       console.error("Action failed:", error);
     } finally {
-      setConfirmDialog({ isOpen: false, type: "archive", deal: null });
+      setConfirmDialog({ isOpen: false, type: "unarchive", deal: null });
     }
   };
 
   const handleCancelAction = () => {
-    setConfirmDialog({ isOpen: false, type: "archive", deal: null });
+    setConfirmDialog({ isOpen: false, type: "unarchive", deal: null });
   };
 
-  if (loading) {
-    return (
-      <div className="deals-page">
-        <div className="deals-header">
-          <h1>Deals</h1>
-          <button onClick={handleCreateNew} className="create-btn primary">
-            New Deal
-          </button>
-        </div>
-        <div className="loading">Loading deals...</div>
-      </div>
-    );
-  }
-
   return (
-    <div className="deals-page">
-      <div className="deals-header">
-        <h1>Deals</h1>
-        <button onClick={handleCreateNew} className="create-btn primary">
-          New Deal
-        </button>
+    <div className="archived-deals-page">
+      <div className="page-header">
+        <div className="header-content">
+          <Archive size={24} className="header-icon" />
+          <div>
+            <h1>Archived Deals</h1>
+            <p>Deals you've archived for later reference</p>
+          </div>
+        </div>
       </div>
 
       <DealFilters
@@ -171,8 +153,10 @@ export default function DealsPage() {
       />
 
       <div className="deals-list">
-        {deals.length === 0 ? (
-          <EmptyState variant="no-deals" />
+        {loading ? (
+          <div className="loading">Loading archived deals...</div>
+        ) : deals.length === 0 ? (
+          <EmptyState variant="no-archived" />
         ) : filteredDeals.length === 0 ? (
           <EmptyState
             variant="no-results"
@@ -184,8 +168,8 @@ export default function DealsPage() {
             <DealCard
               key={deal.id}
               deal={deal}
-              variant="default"
-              onArchive={handleArchive}
+              variant="archived"
+              onUnarchive={handleUnarchive}
               onDelete={handleDelete}
             />
           ))
@@ -195,16 +179,18 @@ export default function DealsPage() {
       <ConfirmDialog
         isOpen={confirmDialog.isOpen}
         title={
-          confirmDialog.type === "archive" ? "Archive deal?" : "Delete deal?"
+          confirmDialog.type === "unarchive"
+            ? "Unarchive deal?"
+            : "Delete deal?"
         }
         message={
-          confirmDialog.type === "archive"
-            ? `"${confirmDialog.deal?.title}" will be moved to your archived deals.`
-            : `"${confirmDialog.deal?.title}" will be moved to deleted items. You can restore it later.`
+          confirmDialog.type === "unarchive"
+            ? `"${confirmDialog.deal?.title}" will be moved back to your active deals.`
+            : `"${confirmDialog.deal?.title}" will be moved to deleted items.`
         }
-        confirmLabel={confirmDialog.type === "archive" ? "Archive" : "Delete"}
-        variant={confirmDialog.type === "archive" ? "info" : "danger"}
-        icon={confirmDialog.type === "archive" ? "warning" : "delete"}
+        confirmLabel={confirmDialog.type === "unarchive" ? "Unarchive" : "Delete"}
+        variant={confirmDialog.type === "unarchive" ? "info" : "danger"}
+        icon={confirmDialog.type === "unarchive" ? "restore" : "delete"}
         onConfirm={handleConfirmAction}
         onCancel={handleCancelAction}
       />

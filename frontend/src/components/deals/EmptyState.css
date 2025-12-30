@@ -1,0 +1,45 @@
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-2xl) var(--spacing-xl);
+  text-align: center;
+  min-height: 300px;
+}
+
+.empty-state-icon {
+  color: var(--muted2);
+  margin-bottom: var(--spacing-lg);
+}
+
+.empty-state-title {
+  font-size: 18px;
+  font-weight: var(--font-heading);
+  color: var(--text);
+  margin: 0 0 var(--spacing-sm) 0;
+}
+
+.empty-state-message {
+  font-size: 14px;
+  color: var(--muted);
+  margin: 0 0 var(--spacing-xl) 0;
+  max-width: 300px;
+}
+
+.clear-filters-btn {
+  padding: var(--spacing-md) var(--spacing-xl);
+  background: var(--accentSoft);
+  color: var(--accent);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: var(--font-label);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.clear-filters-btn:hover {
+  background: var(--accent);
+  color: white;
+}

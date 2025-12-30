@@ -18,6 +18,8 @@ export interface Deal {
   latest_offer_json?: any;
   created_at: string;
   updated_at: string;
+  archived_at?: string | null;
+  deleted_at?: string | null;
 }
 
 export interface Explainability {
@@ -105,6 +107,40 @@ export const dealsApi = {
   },
   runDemo: async (dealId: string, maxSteps?: number) => {
     const res = await api.post<{ deal: Deal; messages: Message[]; steps: any[] }>(`/deals/${dealId}/run-demo`, { maxSteps });
+    return res.data;
+  },
+
+  // Deal lifecycle methods
+  listArchived: async () => {
+    const res = await api.get<{ deals: Deal[] }>("/deals/archived");
+    return res.data;
+  },
+  listDeleted: async () => {
+    const res = await api.get<{ deals: Deal[] }>("/deals/deleted");
+    return res.data;
+  },
+  archive: async (dealId: string) => {
+    const res = await api.post<{ deal: Deal }>(`/deals/${dealId}/archive`);
+    return res.data;
+  },
+  unarchive: async (dealId: string) => {
+    const res = await api.post<{ deal: Deal }>(`/deals/${dealId}/unarchive`);
+    return res.data;
+  },
+  softDelete: async (dealId: string) => {
+    const res = await api.post<{ deal: Deal }>(`/deals/${dealId}/soft-delete`);
+    return res.data;
+  },
+  restore: async (dealId: string) => {
+    const res = await api.post<{ deal: Deal }>(`/deals/${dealId}/restore`);
+    return res.data;
+  },
+  archiveFromDeleted: async (dealId: string) => {
+    const res = await api.post<{ deal: Deal }>(`/deals/${dealId}/archive-from-deleted`);
+    return res.data;
+  },
+  permanentlyDelete: async (dealId: string) => {
+    const res = await api.delete<{ success: boolean }>(`/deals/${dealId}/permanent`);
     return res.data;
   },
 };

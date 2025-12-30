@@ -12,6 +12,7 @@
   
   /* Accent - ONLY one */
   --accent: #7C5CFF;
+  --accent-light: #9B7FFF;
   --accentSoft: rgba(124, 92, 255, 0.16);
   --accentHover: #6B4CE6;
   
@@ -20,6 +21,7 @@
   --okText: rgba(52, 211, 153, 1);
   --warn: rgba(251, 191, 36, 0.16);
   --warnText: rgba(251, 191, 36, 1);
+  --warning: rgba(251, 191, 36, 1);
   --danger: rgba(248, 113, 113, 0.16);
   --dangerText: rgba(248, 113, 113, 1);
   

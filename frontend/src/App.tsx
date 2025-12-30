@@ -8,6 +8,8 @@ import ConversationDealPage from "./pages/ConversationDealPage";
 import SummaryPage from "./pages/SummaryPage";
 import DemoScenarios from "./pages/DemoScenarios";
 import AboutPage from "./pages/AboutPage";
+import ArchivedDealsPage from "./pages/ArchivedDealsPage";
+import DeletedDealsPage from "./pages/DeletedDealsPage";
 import "./App.css";
 
 function App() {
@@ -22,6 +24,8 @@ function App() {
           <Route path="conversation/deals/:dealId" element={<ConversationDealPage />} />
           <Route path="deals/:dealId/summary" element={<SummaryPage />} />
           <Route path="demo-scenarios" element={<DemoScenarios />} />
+          <Route path="archived" element={<ArchivedDealsPage />} />
+          <Route path="deleted" element={<DeletedDealsPage />} />
           <Route path="about" element={<AboutPage />} />
         </Route>
       </Routes>
